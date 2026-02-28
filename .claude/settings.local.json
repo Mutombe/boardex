@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(__NEW_LINE_0527d350ca04ea44__ echo:*)",
+      "Bash(__NEW_LINE_01c80f7ff09d2686__ echo:*)",
+      "Bash(__NEW_LINE_a4a9195cd58cc5f0__ echo:*)",
+      "Bash(npx vite:*)"
+    ]
+  }
+}
