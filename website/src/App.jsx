@@ -7,16 +7,31 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import { CookieModal } from './components/Modals';
 
-// Lazy load pages for performance
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Products = lazy(() => import('./pages/Products'));
-const ProductDetail = lazy(() => import('./pages/ProductDetail'));
-const Projects = lazy(() => import('./pages/Projects'));
-const Services = lazy(() => import('./pages/Services'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Careers = lazy(() => import('./pages/Careers'));
-const Blog = lazy(() => import('./pages/Blog'));
+// Retry dynamic import once on failure (handles stale chunk hashes after deploys)
+function lazyRetry(importFn) {
+  return lazy(() =>
+    importFn().catch(() => {
+      const reloaded = sessionStorage.getItem('chunk_reload');
+      if (!reloaded) {
+        sessionStorage.setItem('chunk_reload', '1');
+        window.location.reload();
+        return new Promise(() => {});
+      }
+      sessionStorage.removeItem('chunk_reload');
+      return importFn();
+    })
+  );
+}
+
+const Home = lazyRetry(() => import('./pages/Home'));
+const About = lazyRetry(() => import('./pages/About'));
+const Products = lazyRetry(() => import('./pages/Products'));
+const ProductDetail = lazyRetry(() => import('./pages/ProductDetail'));
+const Projects = lazyRetry(() => import('./pages/Projects'));
+const Services = lazyRetry(() => import('./pages/Services'));
+const Contact = lazyRetry(() => import('./pages/Contact'));
+const Careers = lazyRetry(() => import('./pages/Careers'));
+const Blog = lazyRetry(() => import('./pages/Blog'));
 
 function LoadingFallback() {
   return (
